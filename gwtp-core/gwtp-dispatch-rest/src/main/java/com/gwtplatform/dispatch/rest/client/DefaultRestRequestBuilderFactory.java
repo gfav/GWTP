@@ -44,15 +44,16 @@ import static com.google.gwt.user.client.rpc.RpcRequestBuilder.MODULE_BASE_HEADE
  * Default implementation for {@link RestRequestBuilderFactory}.
  */
 public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFactory {
-    private static final Map<HttpMethod, Method> HTTP_METHODS = new EnumMap<HttpMethod, Method>(HttpMethod.class);
+    private static final Map<HttpMethod, Method> HTTP_METHOD_TO_REQUEST_BUILDER
+            = new EnumMap<HttpMethod, Method>(HttpMethod.class);
     private static final String JSON_UTF8 = "application/json; charset=utf-8";
 
     static {
-        HTTP_METHODS.put(HttpMethod.GET, RequestBuilder.GET);
-        HTTP_METHODS.put(HttpMethod.POST, RequestBuilder.POST);
-        HTTP_METHODS.put(HttpMethod.PUT, RequestBuilder.PUT);
-        HTTP_METHODS.put(HttpMethod.DELETE, RequestBuilder.DELETE);
-        HTTP_METHODS.put(HttpMethod.HEAD, RequestBuilder.HEAD);
+        HTTP_METHOD_TO_REQUEST_BUILDER.put(HttpMethod.GET, RequestBuilder.GET);
+        HTTP_METHOD_TO_REQUEST_BUILDER.put(HttpMethod.POST, RequestBuilder.POST);
+        HTTP_METHOD_TO_REQUEST_BUILDER.put(HttpMethod.PUT, RequestBuilder.PUT);
+        HTTP_METHOD_TO_REQUEST_BUILDER.put(HttpMethod.DELETE, RequestBuilder.DELETE);
+        HTTP_METHOD_TO_REQUEST_BUILDER.put(HttpMethod.HEAD, RequestBuilder.HEAD);
     }
 
     private final ActionMetadataProvider metadataProvider;
@@ -89,7 +90,7 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
 
     @Override
     public <A extends RestAction<?>> RequestBuilder build(A action, String securityToken) throws ActionException {
-        Method httpMethod = HTTP_METHODS.get(action.getHttpMethod());
+        Method httpMethod = HTTP_METHOD_TO_REQUEST_BUILDER.get(action.getHttpMethod());
         String url = buildUrl(action);
         String xsrfToken = action.isSecured() ? securityToken : "";
 
@@ -100,30 +101,6 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
         buildBody(requestBuilder, action);
 
         return requestBuilder;
-    }
-
-    /**
-     * Encodes the given {@link com.gwtplatform.dispatch.rest.shared.HttpParameter} as a path parameter. The default
-     * implementation delegates to {@link UrlUtils#encodePathSegment(String)}.
-     *
-     * @param value the value to encode.
-     *
-     * @return the encoded path parameter.
-     */
-    protected String encodePathParam(String value) {
-        return urlUtils.encodePathSegment(value);
-    }
-
-    /**
-     * Encodes the given {@link com.gwtplatform.dispatch.rest.shared.HttpParameter} as a query parameter. The default
-     * implementation delegates to {@link UrlUtils#encodeQueryString(String)}.
-     *
-     * @param value the value to encode.
-     *
-     * @return the encoded query parameter.
-     */
-    protected String encodeQueryParam(String value) {
-        return urlUtils.encodeQueryString(value);
     }
 
     /**
