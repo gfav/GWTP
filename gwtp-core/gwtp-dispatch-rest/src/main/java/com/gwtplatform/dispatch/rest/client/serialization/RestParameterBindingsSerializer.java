@@ -23,7 +23,10 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.gwtplatform.common.shared.UrlUtils;
+import com.gwtplatform.dispatch.rest.client.parameters.DefaultHttpParameterFactory;
+import com.gwtplatform.dispatch.rest.client.parameters.HttpParameterFactory;
 import com.gwtplatform.dispatch.rest.client.utils.RestParameterBindings;
+import com.gwtplatform.dispatch.rest.shared.DateFormat;
 import com.gwtplatform.dispatch.rest.shared.HttpMethod;
 import com.gwtplatform.dispatch.rest.shared.HttpParameter;
 import com.gwtplatform.dispatch.rest.shared.HttpParameter.Type;
@@ -55,6 +58,9 @@ public class RestParameterBindingsSerializer {
             return null;
         }
     };
+
+    // TODO: Inject and make ctor pkg-priv
+    private final HttpParameterFactory httpParameterFactory = new DefaultHttpParameterFactory(DateFormat.DEFAULT);
 
     /**
      * Used to serialize the bindings at compilation. Usage of GWT code is <b>not</b> allowed.
@@ -90,7 +96,7 @@ public class RestParameterBindingsSerializer {
                 String key = jsonParameter.get("key").isString().stringValue();
                 String value = jsonParameter.get("value").isString().stringValue();
                 Type type = Type.valueOf(jsonParameter.get("type").isString().stringValue());
-                HttpParameter parameter = new HttpParameter(type, key, value);
+                HttpParameter parameter = httpParameterFactory.create(type, key, value);
 
                 parameters.put(httpMethod, parameter);
             }

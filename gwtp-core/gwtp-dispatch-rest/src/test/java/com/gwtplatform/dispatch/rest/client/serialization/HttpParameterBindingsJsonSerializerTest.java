@@ -44,7 +44,7 @@ public class HttpParameterBindingsJsonSerializerTest {
     public void serializeSimple() {
         // given
         RestParameterBindings map = new RestParameterBindings();
-        map.put(HttpMethod.GET, new HttpParameter(Type.QUERY, "a", 1));
+        map.put(HttpMethod.GET, new HttpParameter(Type.QUERY, "a", 1, dateFormat));
 
         // when
         String serialized = serializer.serialize(map);
@@ -57,10 +57,10 @@ public class HttpParameterBindingsJsonSerializerTest {
     public void serializeComplex() {
         // given
         RestParameterBindings map = new RestParameterBindings();
-        map.put(HttpMethod.GET, new HttpParameter(Type.QUERY, "a", 1));
-        map.put(HttpMethod.GET, new HttpParameter(Type.FORM, "b", false));
-        map.put(HttpMethod.POST, new HttpParameter(Type.HEADER, "c", "some string"));
-        map.put(HttpMethod.POST, new HttpParameter(Type.COOKIE, "d", 29L));
+        map.put(HttpMethod.GET, new HttpParameter(Type.QUERY, "a", 1, dateFormat));
+        map.put(HttpMethod.GET, new HttpParameter(Type.FORM, "b", false, dateFormat));
+        map.put(HttpMethod.POST, new HttpParameter(Type.HEADER, "c", "some string", dateFormat));
+        map.put(HttpMethod.POST, new HttpParameter(Type.COOKIE, "d", 29L, dateFormat));
 
         // when
         String serialized = serializer.serialize(map);

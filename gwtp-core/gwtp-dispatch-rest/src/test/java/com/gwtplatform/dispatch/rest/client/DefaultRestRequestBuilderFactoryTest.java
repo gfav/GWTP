@@ -73,9 +73,9 @@ public class DefaultRestRequestBuilderFactoryTest {
         @GlobalHeaderParams
         RestParameterBindings getHeaderParams() {
             RestParameterBindings headers = new RestParameterBindings();
-            headers.put(GET, new HttpParameter(Type.HEADER, KEY_1, DECODED_VALUE_1));
-            headers.put(GET, new HttpParameter(Type.HEADER, KEY_2, DECODED_VALUE_2));
-            headers.put(POST, new HttpParameter(Type.HEADER, KEY_3, DECODED_VALUE_3));
+            headers.put(GET, new HttpParameter(Type.HEADER, KEY_1, DECODED_VALUE_1, dateFormat));
+            headers.put(GET, new HttpParameter(Type.HEADER, KEY_2, DECODED_VALUE_2, dateFormat));
+            headers.put(POST, new HttpParameter(Type.HEADER, KEY_3, DECODED_VALUE_3, dateFormat));
 
             return headers;
         }
@@ -85,9 +85,9 @@ public class DefaultRestRequestBuilderFactoryTest {
         @GlobalQueryParams
         RestParameterBindings getQueryParams() {
             RestParameterBindings queries = new RestParameterBindings();
-            queries.put(GET, new HttpParameter(Type.QUERY, KEY_1, DECODED_VALUE_1));
-            queries.put(GET, new HttpParameter(Type.QUERY, KEY_2, DECODED_VALUE_2));
-            queries.put(POST, new HttpParameter(Type.QUERY, KEY_3, DECODED_VALUE_3));
+            queries.put(GET, new HttpParameter(Type.QUERY, KEY_1, DECODED_VALUE_1, dateFormat));
+            queries.put(GET, new HttpParameter(Type.QUERY, KEY_2, DECODED_VALUE_2, dateFormat));
+            queries.put(POST, new HttpParameter(Type.QUERY, KEY_3, DECODED_VALUE_3, dateFormat));
 
             return queries;
         }

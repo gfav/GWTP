@@ -30,6 +30,7 @@ import com.github.nmorel.gwtjackson.client.exception.JsonMappingException;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestBuilder.Method;
 import com.gwtplatform.common.shared.UrlUtils;
+import com.gwtplatform.dispatch.rest.client.parameters.HttpParameterFactory;
 import com.gwtplatform.dispatch.rest.client.serialization.Serialization;
 import com.gwtplatform.dispatch.rest.client.utils.RestParameterBindings;
 import com.gwtplatform.dispatch.rest.shared.HttpMethod;
@@ -59,6 +60,7 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
     private final ActionMetadataProvider metadataProvider;
     private final Serialization serialization;
     private final HttpRequestBuilderFactory httpRequestBuilderFactory;
+    private final HttpParameterFactory httpParameterFactory;
     private final UrlUtils urlUtils;
     private final RestParameterBindings globalHeaderParams;
     private final RestParameterBindings globalQueryParams;
@@ -71,6 +73,7 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
             ActionMetadataProvider metadataProvider,
             Serialization serialization,
             HttpRequestBuilderFactory httpRequestBuilderFactory,
+            HttpParameterFactory httpParameterFactory,
             UrlUtils urlUtils,
             @GlobalHeaderParams RestParameterBindings globalHeaderParams,
             @GlobalQueryParams RestParameterBindings globalQueryParams,
@@ -80,6 +83,7 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
         this.metadataProvider = metadataProvider;
         this.serialization = serialization;
         this.httpRequestBuilderFactory = httpRequestBuilderFactory;
+        this.httpParameterFactory = httpParameterFactory;
         this.urlUtils = urlUtils;
         this.globalHeaderParams = globalHeaderParams;
         this.globalQueryParams = globalQueryParams;
@@ -141,15 +145,14 @@ public class DefaultRestRequestBuilderFactory implements RestRequestBuilderFacto
         List<HttpParameter> headerParams = new ArrayList<HttpParameter>();
 
         // By setting the most generic headers first, we make sure they can be overridden by more specific ones
-        headerParams.add(new HttpParameter(Type.HEADER, HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON));
-        headerParams.add(new HttpParameter(Type.HEADER, HttpHeaders.CONTENT_TYPE, JSON_UTF8));
-        headerParams.add(new HttpParameter(Type.HEADER, HttpHeaders.CONTENT_TYPE, JSON_UTF8));
+        headerParams.add(httpParameterFactory.create(Type.HEADER, HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON));
+        headerParams.add(httpParameterFactory.create(Type.HEADER, HttpHeaders.CONTENT_TYPE, JSON_UTF8));
 
         if (!isAbsoluteUrl(action.getPath())) {
-            headerParams.add(new HttpParameter(Type.HEADER, MODULE_BASE_HEADER, baseUrl));
+            headerParams.add(httpParameterFactory.create(Type.HEADER, MODULE_BASE_HEADER, baseUrl));
         }
         if (xsrfToken != null && !xsrfToken.isEmpty()) {
-            headerParams.add(new HttpParameter(Type.HEADER, securityHeaderName, xsrfToken));
+            headerParams.add(httpParameterFactory.create(Type.HEADER, securityHeaderName, xsrfToken));
         }
 
         headerParams.addAll(globalHeaderParams.get(action.getHttpMethod()));

@@ -37,6 +37,8 @@ import com.gwtplatform.dispatch.rest.client.RestRequestBuilderFactory;
 import com.gwtplatform.dispatch.rest.client.RestResponseDeserializer;
 import com.gwtplatform.dispatch.rest.client.XsrfHeaderName;
 import com.gwtplatform.dispatch.rest.client.interceptor.RestInterceptorRegistry;
+import com.gwtplatform.dispatch.rest.client.parameters.DefaultHttpParameterFactory;
+import com.gwtplatform.dispatch.rest.client.parameters.HttpParameterFactory;
 import com.gwtplatform.dispatch.rest.client.serialization.RestParameterBindingsSerializer;
 import com.gwtplatform.dispatch.rest.client.serialization.Serialization;
 import com.gwtplatform.dispatch.rest.client.utils.RestParameterBindings;
@@ -97,6 +99,7 @@ public class RestDispatchAsyncModule extends AbstractDispatchAsyncModule {
         bind(RestDispatchCallFactory.class).to(DefaultRestDispatchCallFactory.class).in(Singleton.class);
         bind(RestRequestBuilderFactory.class).to(DefaultRestRequestBuilderFactory.class).in(Singleton.class);
         bind(RestResponseDeserializer.class).to(DefaultRestResponseDeserializer.class).in(Singleton.class);
+        bind(HttpParameterFactory.class).to(DefaultHttpParameterFactory.class).in(Singleton.class);
 
         // Cross-concern
         bind(RestDispatchHooks.class).to(builder.getDispatchHooks()).in(Singleton.class);
